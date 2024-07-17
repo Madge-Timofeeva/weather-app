@@ -5,15 +5,25 @@ const api = {
     key: '93401e7df97c653d4b06d431c7c7ee99'
 }
 
-const input = document.querySelector('#input');
-input.addEventListener('keypress', enter);
+const input = document.querySelector("#input");
 
-// 1 if- если нажата клавиша энтер(13 клавиша)
-//2 - выполняем поиск
-function enter(e){
-if(e.keyCode === 13){
-    getInfo(input.value);
-}
+input.addEventListener("keypress", function(e) {
+  if (e.keyCode === 13) {
+    e.preventDefault(); // Предотвращаем действие по умолчанию при нажатии Enter на компьютере
+    getInfo(input.value.trim());
+    input.value = ''; // Очищаем поле ввода
+  }
+});
+
+input.addEventListener("input", function(e) {
+  if (!isMobileDevice()) {
+    getInfo(e.target.value.trim());
+    input.value = ''; // Очищаем поле ввода
+  }
+});
+
+function isMobileDevice() {
+  return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('Mobi') !== -1);
 }
 
 async function getInfo(data){
