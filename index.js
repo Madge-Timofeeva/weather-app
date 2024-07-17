@@ -5,26 +5,25 @@ const api = {
     key: '93401e7df97c653d4b06d431c7c7ee99'
 }
 
-const input = document.querySelector("#input");
+const inputField = document.querySelector("#input");
 
-input.addEventListener("keypress", function(e) {
-  if (e.keyCode === 13) {
-    e.preventDefault(); // Предотвращаем действие по умолчанию при нажатии Enter на компьютере
-    getInfo(input.value.trim());
-    input.value = ''; // Очищаем поле ввода
+inputField.addEventListener("keypress", function(e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    getInfo(inputField.value.trim());
   }
 });
 
-input.addEventListener("input", function(e) {
+inputField.addEventListener("input", function(e) {
   if (!isMobileDevice()) {
     getInfo(e.target.value.trim());
-    input.value = ''; // Очищаем поле ввода
   }
 });
 
 function isMobileDevice() {
   return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('Mobi') !== -1);
 }
+
 
 async function getInfo(data){
 const res = await fetch(`${api.endpoint}weather?q=${data}&units=metric&appID=${api.key}`);
