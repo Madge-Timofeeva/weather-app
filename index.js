@@ -5,25 +5,26 @@ const api = {
     key: '93401e7df97c653d4b06d431c7c7ee99'
 }
 
-const inputField = document.querySelector("#input");
+const input = document.querySelector('#input');
 
-inputField.addEventListener("keypress", function(e) {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    getInfo(inputField.value.trim());
-  }
-});
-
-inputField.addEventListener("input", function(e) {
+input.addEventListener('input', function(e) {
   if (!isMobileDevice()) {
-    getInfo(e.target.value.trim());
+    if (e.inputType === 'insertLineBreak' || e.inputType === 'insertText') {
+      // Если это не мобильное устройство и нажата клавиша Enter, ждем нажатия Enter
+      // Мы не делаем ничего здесь, так как ввод будет обработан отдельно в обработчике keypress
+    }
+  } else {
+    // Если это мобильное устройство, сразу выполняем поиск после ввода
+    getInfo(input.value);
   }
 });
 
-function isMobileDevice() {
-  return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('Mobi') !== -1);
-}
-
+input.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    // Для любого устройства, при нажатии Enter выполняем поиск
+    getInfo(input.value);
+  }
+});
 
 async function getInfo(data){
 const res = await fetch(`${api.endpoint}weather?q=${data}&units=metric&appID=${api.key}`);
