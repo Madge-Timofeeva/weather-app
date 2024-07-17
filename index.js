@@ -7,22 +7,14 @@ const api = {
 
 const input = document.querySelector('#input');
 
-input.addEventListener('input', function(e) {
-  if (!isMobileDevice()) {
-    if (e.inputType === 'insertLineBreak' || e.inputType === 'insertText') {
-      // Если это не мобильное устройство и нажата клавиша Enter, ждем нажатия Enter
-      // Мы не делаем ничего здесь, так как ввод будет обработан отдельно в обработчике keypress
-    }
-  } else {
-    // Если это мобильное устройство, сразу выполняем поиск после ввода
-    getInfo(input.value);
-  }
-});
-
-input.addEventListener('keypress', function(e) {
+input.addEventListener('keydown', function(e) {
   if (e.key === 'Enter') {
-    // Для любого устройства, при нажатии Enter выполняем поиск
-    getInfo(input.value);
+    e.preventDefault(); // Предотвращаем действие по умолчанию (например, отправку формы)
+    const value = input.value.trim();
+    if (value !== '') {
+      getInfo(value);
+      input.value = ''; // Очищаем поле ввода
+    }
   }
 });
 
